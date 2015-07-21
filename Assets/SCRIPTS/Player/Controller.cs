@@ -8,13 +8,21 @@ public class Controller : MonoBehaviour {
 	float x;
 	float y;
 	public int force;
+	public GameObject equippedBullet;
+	GameObject instanciatedBullet;
 
 	void Start () {
 		rb = GetComponent<Rigidbody>();
 	}
+
+	void Fire() {
+		rb.AddForce(transform.up * -force);
+		instanciatedBullet = Instantiate (equippedBullet, transform.position, transform.rotation) as GameObject;
+	}
 	
 	// Update is called once per frame
 	void Update () {
+		rb.angularVelocity = Vector3.zero;
 		var inputDevice = InputManager.ActiveDevice;
 		x = -inputDevice.LeftStickX;
 		y = inputDevice.LeftStickY;
@@ -25,7 +33,7 @@ public class Controller : MonoBehaviour {
 		}
 
 		if (inputDevice.Action1.WasPressed) {
-			rb.AddForce(transform.up * -force);
+			Fire();
 		}
 	}
 }
