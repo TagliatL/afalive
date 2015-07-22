@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using InControl;
 
@@ -36,10 +36,17 @@ public class Controller : MonoBehaviour {
 		counter--;
 	}
 
+	void CancelCamEffect() {
+		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().colorDrift = 0;
+		GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<AnalogGlitch> ().horizontalShake = 0;
+	}
+
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "PowerUp") {
 			equippedBullet = other.GetComponent<PowerUp>().pickUpBullet;
 			other.GetComponent<PowerUp>().Used();
+			GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().colorDrift = 0.35f;
+			Invoke("CancelCamEffect",0.3f);
 		}
 	}
 }

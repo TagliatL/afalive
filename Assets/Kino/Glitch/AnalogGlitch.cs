@@ -21,12 +21,13 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using UnityEngine;
+using System.Collections;
 
-namespace Kino
-{
+
     [ExecuteInEditMode]
     [RequireComponent(typeof(Camera))]
     [AddComponentMenu("Kino Image Effects/Analog Glitch")]
+
     public class AnalogGlitch : MonoBehaviour
     {
         #region Public Properties
@@ -112,4 +113,4 @@ namespace Kino
 
         #endregion
     }
-}
+
