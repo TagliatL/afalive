@@ -9,6 +9,8 @@ public class Controller : MonoBehaviour {
 	float y;
 	float counter;
 	public GameObject equippedBullet;
+	public GameObject fireParticles;
+	GameObject instanciatedParticles;
 	GameObject instanciatedBullet;
 
 	void Start () {
@@ -32,6 +34,7 @@ public class Controller : MonoBehaviour {
 			counter = bulletValues.rateOfFire * 100;
 			rb.AddForce(transform.up * -bulletValues.force);
 			instanciatedBullet = Instantiate (equippedBullet, transform.position, transform.rotation) as GameObject;
+			instanciatedParticles = Instantiate(fireParticles, transform.position, transform.rotation) as GameObject;
 		}
 		counter--;
 	}
