@@ -35,4 +35,11 @@ public class Controller : MonoBehaviour {
 		}
 		counter--;
 	}
+
+	void OnTriggerEnter(Collider other) {
+		if (other.tag == "PowerUp") {
+			equippedBullet = other.GetComponent<PowerUp>().pickUpBullet;
+			other.GetComponent<PowerUp>().Used();
+		}
+	}
 }
