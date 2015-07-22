@@ -7,21 +7,36 @@ public class Controller : MonoBehaviour {
 	Rigidbody rb;
 	float x;
 	float y;
-	public int force;
+	bool isContinue;
 	public GameObject equippedBullet;
 	GameObject instanciatedBullet;
 
 	void Start () {
 		rb = GetComponent<Rigidbody>();
+		isContinue = false;
 	}
 
-	void Fire() {
-		rb.AddForce(transform.up * -force);
-		instanciatedBullet = Instantiate (equippedBullet, transform.position, transform.rotation) as GameObject;
+	void ResetFire() {
+		isContinue = false;
+	}
+
+	//coroutine de tir
+	IEnumerator ContinuedFire(BulletManager bulletValues) {
+		var inputDevice = InputManager.ActiveDevice;
+		while (true) {
+			if(inputDevice.Action1.IsPressed) {
+				rb.AddForce(transform.up * -bulletValues.force);
+				instanciatedBullet = Instantiate (equippedBullet, transform.position, transform.rotation) as GameObject;
+			}
+			//ceci permet en théorie de faire ce que je veux mais quand tu testes tu vois que des fois y'a trop de bullets qui partent
+			Invoke("ResetFire",bulletValues.rateOfFire);
+			yield return new WaitForSeconds(bulletValues.rateOfFire);
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		BulletManager bulletValues = equippedBullet.GetComponent<BulletManager> ();
 		rb.angularVelocity = Vector3.zero;
 		var inputDevice = InputManager.ActiveDevice;
 		x = -inputDevice.LeftStickX;
@@ -31,9 +46,13 @@ public class Controller : MonoBehaviour {
 			float angle = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
 			transform.rotation = Quaternion.AngleAxis(90.0f - angle, Vector3.forward);
 		}
-
-		if (inputDevice.Action1.WasPressed) {
-			Fire();
+		//lance la coroutine si elle n'est pas déjà lancé
+		if (inputDevice.Action1.WasPressed && !isContinue) {
+			StartCoroutine(ContinuedFire(bulletValues));
+			isContinue = true;
+		}
+		else if (inputDevice.Action1.WasReleased && !isContinue) {
+			StopAllCoroutines();
 		}
 	}
 }
