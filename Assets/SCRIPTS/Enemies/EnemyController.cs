@@ -5,7 +5,7 @@ public class EnemyController : MonoBehaviour {
 
 	public Transform target;
 	public float speed;
-	public float rotationSpeed;
+	//public float rotationSpeed;
 
 	void Start() {
 		target = null;
@@ -14,7 +14,9 @@ public class EnemyController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (target != null) {
-			Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target.position - transform.position), rotationSpeed * Time.deltaTime);
+			Quaternion rotation = Quaternion.LookRotation
+				(target.transform.position - transform.position, transform.TransformDirection(-Vector3.forward));
+			transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
 			transform.position = transform.position + (transform.up * speed * Time.deltaTime);
 		}
 	}
