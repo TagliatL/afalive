@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour {
 	RaycastHit lastHit;
 
 	void Start() {
-		target = null;
+		//target = null;
 		avoiding = false;
 	}
 
