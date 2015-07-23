@@ -12,6 +12,7 @@ public class DestroyByContact : MonoBehaviour {
 			Instantiate (other.GetComponent<BulletManager>().impactParticles, transform.position, transform.rotation);
 
 			if(life <= 0) {
+				Instantiate (explosion, transform.position, transform.rotation);
 				Destroy (other.gameObject);
 				Destroy (gameObject);
 			}
