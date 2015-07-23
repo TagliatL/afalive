@@ -8,7 +8,6 @@ public class AwarenessAreaBehavior : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Player") {
 			ship.GetComponent<EnemyController>().AssignTarget(other.transform);
-			//ship.target = other.transform;
 		}
 	}
 }

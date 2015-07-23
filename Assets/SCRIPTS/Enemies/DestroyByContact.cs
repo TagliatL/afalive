@@ -10,10 +10,9 @@ public class DestroyByContact : MonoBehaviour {
 		if (other.tag == "Bullet") {
 			life -= other.GetComponent<BulletManager>().damages;
 			Instantiate (other.GetComponent<BulletManager>().impactParticles, transform.position, transform.rotation);
-
+			Destroy (other.gameObject);
 			if(life <= 0) {
 				Instantiate (explosion, transform.position, transform.rotation);
-				Destroy (other.gameObject);
 				Destroy (gameObject);
 			}
 		}
