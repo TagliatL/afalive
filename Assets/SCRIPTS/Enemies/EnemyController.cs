@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EnemyController : MonoBehaviour {
 
- 	private Transform target;
+ 	public Transform target;
 	public float speed;
 	public float rotationSpeed;
 
@@ -20,9 +20,5 @@ public class EnemyController : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter(Collider other) {
-		if (other.tag == "Player") {
-			target = other.transform;
-		}
-	}
+
 }
