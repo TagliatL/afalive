@@ -44,6 +44,7 @@ public class Controller : MonoBehaviour {
 	void CancelCamEffect() {
 		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().colorDrift = 0;
 		GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<AnalogGlitch> ().horizontalShake = 0;
+		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().horizontalShake = 0;
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -55,8 +56,12 @@ public class Controller : MonoBehaviour {
 		} else if (other.tag == "Enemy") {
 			Destroy (other.gameObject);
 			Instantiate (explosion, other.transform.position, other.transform.rotation);
+			GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().horizontalShake = 0.1f;
+			Invoke("CancelCamEffect",0.3f);
+
 			life -= 1;
 			if (life <= 0) {
+				CancelCamEffect();
 				Instantiate (explosion, transform.position, transform.rotation);
 				Destroy (gameObject);
 			}
