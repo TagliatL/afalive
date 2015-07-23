@@ -48,8 +48,8 @@ public class Controller : MonoBehaviour {
 		if (other.tag == "PowerUp") {
 			equippedBullet = other.GetComponent<PowerUp>().pickUpBullet;
 			other.GetComponent<PowerUp>().Used();
-			GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().colorDrift = 0.35f;
-			Invoke("CancelCamEffect",0.3f);
+			GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().colorDrift = 0.4f;
+			Invoke("CancelCamEffect",0.35f);
 		}
 	}
 }

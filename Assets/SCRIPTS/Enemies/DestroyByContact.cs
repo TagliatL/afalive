@@ -3,10 +3,18 @@ using System.Collections;
 
 public class DestroyByContact : MonoBehaviour {
 
+	public int life;
+	public GameObject explosion;
+
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Bullet") {
-			Destroy (other.gameObject);
-			Destroy (gameObject);
+			life -= other.GetComponent<BulletManager>().damages;
+			Instantiate (other.GetComponent<BulletManager>().impactParticles, transform.position, transform.rotation);
+
+			if(life <= 0) {
+				Destroy (other.gameObject);
+				Destroy (gameObject);
+			}
 		}
 	}
 }

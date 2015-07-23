@@ -11,4 +11,8 @@ public abstract class BulletManager : MonoBehaviour {
 	public float speed;
 	[Tooltip("Durée de vie du projectile (en frames)")]
 	public float lifeTime;
+	[Tooltip("Degats sur les ennemis")]
+	public int damages;
+	[Tooltip("Effet d'impact sur les ennemis, les walls etc...")]
+	public GameObject impactParticles;
 }
