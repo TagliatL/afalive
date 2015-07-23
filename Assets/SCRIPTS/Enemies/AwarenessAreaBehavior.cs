@@ -3,11 +3,12 @@ using System.Collections;
 
 public class AwarenessAreaBehavior : MonoBehaviour {
 
-	public EnemyController ship;
+	public GameObject ship;
 	
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Player") {
-			ship.target = other.transform;
+			ship.GetComponent<EnemyController>().AssignTarget(other.transform);
+			//ship.target = other.transform;
 		}
 	}
 }

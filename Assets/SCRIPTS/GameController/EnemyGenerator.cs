@@ -25,7 +25,8 @@ public class EnemyGenerator : MonoBehaviour {
 			Quaternion spawnRotation = Quaternion.identity;
 			// Instantiate Black Hole here;
 			for (int i = 0; i < enemiesPerWave; i++) {
-				Instantiate(enemy, spawnPosition, spawnRotation);
+				GameObject obj = Instantiate(enemy, spawnPosition, spawnRotation) as GameObject;
+				obj.GetComponent<EnemyController>().AssignTarget(player.transform);
 				yield return new WaitForSeconds (spawnExitRate);
 			}
 		yield return new WaitForSeconds (waveWait);

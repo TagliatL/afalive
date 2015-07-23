@@ -16,6 +16,10 @@ public class EnemyController : MonoBehaviour {
 		avoiding = false;
 	}
 
+	public void AssignTarget(Transform newTarget) {
+		target = newTarget;
+	}
+
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (target != null) {
@@ -23,11 +27,15 @@ public class EnemyController : MonoBehaviour {
 			bool hit = Physics.Raycast(transform.position, transform.up, out hitInfo, maneuverDistance);
 			Quaternion rotation;
 			if (avoiding) {
-				rotation =  Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lastHit.transform.position + transform.right, transform.TransformDirection(-Vector3.forward)), rotationSpeed * Time.deltaTime);
-				transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
-				transform.position = transform.position + (transform.up * speed * Time.deltaTime);
-				counter--;
-				if (counter <= 0) {
+				try {
+					rotation =  Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lastHit.transform.position + transform.right, transform.TransformDirection(-Vector3.forward)), rotationSpeed * Time.deltaTime);
+					transform.rotation = new Quaternion(0, 0, rotation.z, rotation.w);
+					transform.position = transform.position + (transform.up * speed * Time.deltaTime);
+					counter--;
+					if (counter <= 0) {
+						avoiding = false;
+					}
+				} catch (System.Exception e) {
 					avoiding = false;
 				}
 			} else if (hit) {
