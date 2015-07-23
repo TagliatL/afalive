@@ -17,7 +17,7 @@ public class EnemyController : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		if (target != null) {
 			RaycastHit hitInfo;
 			bool hit = Physics.Raycast(transform.position, transform.up, out hitInfo, maneuverDistance);
