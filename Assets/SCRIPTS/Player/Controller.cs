@@ -8,6 +8,8 @@ public class Controller : MonoBehaviour {
 	float x;
 	float y;
 	float counter;
+	public int life;
+	public GameObject explosion;
 	public GameObject equippedBullet;
 	public GameObject fireParticles;
 	GameObject instanciatedParticles;
@@ -50,6 +52,14 @@ public class Controller : MonoBehaviour {
 			other.GetComponent<PowerUp>().Used();
 			GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().colorDrift = 0.4f;
 			Invoke("CancelCamEffect",0.35f);
+		} else if (other.tag == "Enemy") {
+			Destroy (other.gameObject);
+			Instantiate (explosion, other.transform.position, other.transform.rotation);
+			life -= 1;
+			if (life <= 0) {
+				Instantiate (explosion, transform.position, transform.rotation);
+				Destroy (gameObject);
+			}
 		}
 	}
 }
