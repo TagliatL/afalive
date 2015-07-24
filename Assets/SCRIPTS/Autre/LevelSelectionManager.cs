@@ -9,8 +9,6 @@ public class LevelSelectionManager : MonoBehaviour {
 	int previousLevel;
 	GameObject[] levels;
 	bool isSwitching;
-	bool right;
-	bool left;
 	private float startTime;
 
 
@@ -39,19 +37,19 @@ public class LevelSelectionManager : MonoBehaviour {
 	void Update () {
 		var inputDevice = InputManager.ActiveDevice;
 		if (!isSwitching && inputDevice.LeftStickX > 0.6f) {
-			isSwitching = true;
-			previousLevel = currentLevel;
 			if (currentLevel < levels.Length - 1) {
+				previousLevel = currentLevel;
 				currentLevel++;
+				isSwitching = true;
+				StartCoroutine("SwitchLevel");
 			}
-			StartCoroutine("SwitchLevel");
 		} else if (!isSwitching && inputDevice.LeftStickX < -0.6f) {
-			isSwitching = true;
-			previousLevel = currentLevel;
 			if (currentLevel > 0) {
+				previousLevel = currentLevel;
 				currentLevel--;
+				isSwitching = true;
+				StartCoroutine("SwitchLevel");
 			}
-			StartCoroutine("SwitchLevel");
 		}
 	}
 }
