@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using InControl;
+using UnityEngine.UI;
 
 public class LevelSelectionManager : MonoBehaviour {
 
 	public Camera cam;
 	public int currentLevel;
+	public Text name;
 	int previousLevel;
 	GameObject[] levels;
 	bool isSwitching;
@@ -18,6 +20,7 @@ public class LevelSelectionManager : MonoBehaviour {
 	}
 
 	IEnumerator SwitchLevel() {
+		name.text = levels [previousLevel].name;
 		while (isSwitching) {
 			cam.transform.position = Vector3.Lerp(new Vector3(cam.transform.position.x,cam.transform.position.y,cam.transform.position.z),
 			                                      new Vector3(-levels[currentLevel].transform.localPosition.x,cam.transform.position.y,cam.transform.position.z), 10 * Time.deltaTime);
@@ -30,7 +33,7 @@ public class LevelSelectionManager : MonoBehaviour {
 				isSwitching = false;
 			}
 			yield return null;
-		
+			
 		}
 	}
 
@@ -40,6 +43,7 @@ public class LevelSelectionManager : MonoBehaviour {
 			if (currentLevel < levels.Length - 1) {
 				previousLevel = currentLevel;
 				currentLevel++;
+
 				isSwitching = true;
 				StartCoroutine("SwitchLevel");
 			}
@@ -50,6 +54,9 @@ public class LevelSelectionManager : MonoBehaviour {
 				isSwitching = true;
 				StartCoroutine("SwitchLevel");
 			}
+		}
+		if (inputDevice.Action1.WasPressed) {
+			Application.LoadLevel("viruses"+currentLevel);
 		}
 	}
 }
