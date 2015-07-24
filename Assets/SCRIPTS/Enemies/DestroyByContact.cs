@@ -19,4 +19,9 @@ public class DestroyByContact : MonoBehaviour {
 			other.GetComponent<StandardBullet>().ExplodeMine();
 		}
 	}
+
+	public void Explode() {
+		Instantiate (explosion, transform.position, transform.rotation);
+				Destroy (gameObject);
+	}
 }

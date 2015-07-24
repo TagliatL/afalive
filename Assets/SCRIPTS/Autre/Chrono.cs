@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Chrono : MonoBehaviour {
 	
 	public Text chrono;
+	public Text shadow;
 	public Text yourTime;
 	private bool _isRunning;
 	private bool _wasRunningLastUpdate;
@@ -26,6 +27,7 @@ public class Chrono : MonoBehaviour {
 	}
 	
 	public void StopTimer() {
+		yourTime.text = "Virus Destroyed \n \t Your time : " + chrono.text;
 		_isRunning = false;
 	}
 	
@@ -41,6 +43,7 @@ public class Chrono : MonoBehaviour {
 		
 		var timeSpan = TimeSpan.FromSeconds(_elapsedSeconds);
 		chrono.text = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+		shadow.text = chrono.text;
 
 		_timeLastUpdate = Time.time;
 		_wasRunningLastUpdate = true;

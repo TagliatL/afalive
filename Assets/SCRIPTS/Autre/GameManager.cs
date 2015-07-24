@@ -13,11 +13,18 @@ public class GameManager : MonoBehaviour {
 	GameObject timer;
 	bool levelStarted;
 	DestroyByContact coreValues;
+
 	// Use this for initialization
 	void Start () {
 		levelStarted = false;
 		theCore = GameObject.FindGameObjectWithTag ("Core");
 		coreValues = theCore.GetComponent<DestroyByContact> ();
+	}
+
+	void DestroyAllEnemies() {
+		for(int i = 0; i < GameObject.FindGameObjectsWithTag("Enemy").Length; i++) {
+			GameObject.FindGameObjectsWithTag("Enemy")[i].GetComponent<DestroyByContact>().Explode();
+		}
 	}
 
 	// Update is called once per frame
@@ -35,7 +42,10 @@ public class GameManager : MonoBehaviour {
 		if (coreValues.life <= 0) {
 			spawner.GetComponent<EnemyGenerator>().enabled = false;
 			thePlayer.GetComponent<Controller>().enabled = false;
+			yourTime.SetActive(true);
 			chrono.GetComponent<Chrono>().StopTimer();
+			chrono.SetActive(false);
+			DestroyAllEnemies();
 		}
 	}
 }
