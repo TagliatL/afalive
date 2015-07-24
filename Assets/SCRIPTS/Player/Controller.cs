@@ -8,6 +8,7 @@ public class Controller : MonoBehaviour {
 	float x;
 	float y;
 	float counter;
+	bool isDead;
 	public int life;
 	public GameObject explosion;
 	public GameObject equippedBullet;
@@ -32,7 +33,7 @@ public class Controller : MonoBehaviour {
 			transform.rotation = Quaternion.AngleAxis(90.0f - angle, Vector3.forward);
 		}
 
-		if (inputDevice.Action1.IsPressed && (counter <= 0f)) {
+		if (inputDevice.Action1.IsPressed && (counter <= 0f) && !isDead) {
 			counter = bulletValues.rateOfFire * 100;
 			rb.AddForce(transform.up * -bulletValues.force);
 			instanciatedBullet = Instantiate (equippedBullet, transform.position, transform.rotation) as GameObject;
@@ -68,6 +69,7 @@ public class Controller : MonoBehaviour {
 				CancelCamEffect();
 				Instantiate (explosion, transform.position, transform.rotation);
 				GetComponentInChildren<SpriteRenderer>().enabled = false;
+				isDead = true;
 				Invoke("BackToMenu",1.5f);
 			}
 		}
