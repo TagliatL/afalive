@@ -9,33 +9,29 @@ public class LevelSelectionManager : MonoBehaviour {
 	public int currentLevel;
 	public Text name;
 	int previousLevel;
-	GameObject[] levels;
+	public GameObject[] levels;
 	bool isSwitching;
 	private float startTime;
 
 
 	void Start () {
 		isSwitching = false;
-		levels = GameObject.FindGameObjectsWithTag("Core");
-		print (levels.Length);
-		cam.transform.position = new Vector3(-levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
+		//levels = GameObject.FindGameObjectsWithTag("Core");
+		name.text = levels [currentLevel].name;
+		cam.transform.position = new Vector3(levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
 	}
 
 	IEnumerator SwitchLevel() {
-		name.text = levels [previousLevel].name;
+		name.text = levels [currentLevel].name;
 		while (isSwitching) {
 			cam.transform.position = Vector3.Lerp(new Vector3(cam.transform.position.x,cam.transform.position.y,cam.transform.position.z),
-			                                      new Vector3(-levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z), 10 * Time.deltaTime);
+			                                      new Vector3(levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z), 10 * Time.deltaTime);
 				
-			if (cam.transform.position.x >= -levels[currentLevel].transform.TransformPoint(Vector3.zero).x - 0.1 && currentLevel > previousLevel) {
-				cam.transform.position = new Vector3(-levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
-				print (currentLevel);
-				print("lol");
+			if (cam.transform.position.x >= levels[currentLevel].transform.TransformPoint(Vector3.zero).x - 0.1 && currentLevel > previousLevel) {
+				cam.transform.position = new Vector3(levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
 				isSwitching = false;
-			} else if (cam.transform.position.x <= -levels[currentLevel].transform.TransformPoint(Vector3.zero).x + 0.1 && currentLevel < previousLevel) {
-				cam.transform.position = new Vector3(-levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
-				print (currentLevel);
-				print("lol2");
+			} else if (cam.transform.position.x <= levels[currentLevel].transform.TransformPoint(Vector3.zero).x + 0.1 && currentLevel < previousLevel) {
+				cam.transform.position = new Vector3(levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
 				isSwitching = false;
 			}
 			yield return new WaitForEndOfFrame();
@@ -47,7 +43,6 @@ public class LevelSelectionManager : MonoBehaviour {
 		var inputDevice = InputManager.ActiveDevice;
 		if (!isSwitching && inputDevice.LeftStickX > 0.6f) {
 			if (currentLevel < levels.Length - 1) {
-				print (currentLevel);
 				previousLevel = currentLevel;
 				currentLevel++;
 				isSwitching = true;
