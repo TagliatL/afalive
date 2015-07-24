@@ -5,6 +5,7 @@ public class StandardBullet : BulletManager {
 
 	public float mineTimeout;
 	public float areaOfEffect;
+	public GameObject explosionMine;
 
 	void OnEnable() {
 		if (this.tag == "Bullet") {
@@ -16,9 +17,12 @@ public class StandardBullet : BulletManager {
 
 	public void ExplodeMine() {
 		Object.Destroy(this.gameObject);
+		if (explosionMine != null) {
+			Instantiate (explosionMine, transform.position, Quaternion.identity);
+		}
 		Collider[] hitColliders = Physics.OverlapSphere(this.gameObject.transform.position, areaOfEffect);
 		foreach (Collider hitCollider in hitColliders) {
-			if (hitCollider.CompareTag("Enemy")) {
+			if (hitCollider.CompareTag("Enemy") || hitCollider.CompareTag("Core")) {
 				hitCollider.gameObject.GetComponent<DestroyByContact>().life -= this.damages;
 				if (hitCollider.gameObject.GetComponent<DestroyByContact>().life <= 0) {
 					Object.Destroy(hitCollider.gameObject);
