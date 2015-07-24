@@ -17,22 +17,28 @@ public class LevelSelectionManager : MonoBehaviour {
 	void Start () {
 		isSwitching = false;
 		levels = GameObject.FindGameObjectsWithTag("Core");
+		print (levels.Length);
+		cam.transform.position = new Vector3(-levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
 	}
 
 	IEnumerator SwitchLevel() {
 		name.text = levels [previousLevel].name;
 		while (isSwitching) {
 			cam.transform.position = Vector3.Lerp(new Vector3(cam.transform.position.x,cam.transform.position.y,cam.transform.position.z),
-			                                      new Vector3(-levels[currentLevel].transform.localPosition.x,cam.transform.position.y,cam.transform.position.z), 10 * Time.deltaTime);
+			                                      new Vector3(-levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z), 10 * Time.deltaTime);
 				
-			if (Mathf.Abs(cam.transform.position.x) >= Mathf.Abs(levels[currentLevel].transform.localPosition.x) - 0.1 && currentLevel > previousLevel) {
+			if (cam.transform.position.x >= -levels[currentLevel].transform.TransformPoint(Vector3.zero).x - 0.1 && currentLevel > previousLevel) {
+				cam.transform.position = new Vector3(-levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
+				print (currentLevel);
 				print("lol");
 				isSwitching = false;
-			} else if (Mathf.Abs(cam.transform.position.x) <= Mathf.Abs(levels[currentLevel].transform.localPosition.x) + 0.1 && currentLevel < previousLevel) {
+			} else if (cam.transform.position.x <= -levels[currentLevel].transform.TransformPoint(Vector3.zero).x + 0.1 && currentLevel < previousLevel) {
+				cam.transform.position = new Vector3(-levels[currentLevel].transform.TransformPoint(Vector3.zero).x,cam.transform.position.y,cam.transform.position.z);
+				print (currentLevel);
 				print("lol2");
 				isSwitching = false;
 			}
-			yield return null;
+			yield return new WaitForEndOfFrame();
 			
 		}
 	}
@@ -41,9 +47,9 @@ public class LevelSelectionManager : MonoBehaviour {
 		var inputDevice = InputManager.ActiveDevice;
 		if (!isSwitching && inputDevice.LeftStickX > 0.6f) {
 			if (currentLevel < levels.Length - 1) {
+				print (currentLevel);
 				previousLevel = currentLevel;
 				currentLevel++;
-
 				isSwitching = true;
 				StartCoroutine("SwitchLevel");
 			}
