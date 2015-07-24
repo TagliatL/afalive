@@ -27,6 +27,10 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	void SaveScore() {
+
+	}
+
 	// Update is called once per frame
 	void Update () {
 		var inputDevice = InputManager.ActiveDevice;
@@ -46,6 +50,10 @@ public class GameManager : MonoBehaviour {
 			chrono.GetComponent<Chrono>().StopTimer();
 			chrono.SetActive(false);
 			DestroyAllEnemies();
+			SaveScore();
+			if(inputDevice.Action1.WasPressed) {
+				Application.LoadLevel("LevelSelection");
+			}
 		}
 	}
 }
