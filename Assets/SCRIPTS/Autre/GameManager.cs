@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void SaveScore() {
-
+		//if(
+		//chrono.text
 	}
 
 	// Update is called once per frame

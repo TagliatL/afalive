@@ -47,6 +47,10 @@ public class Controller : MonoBehaviour {
 		GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().horizontalShake = 0;
 	}
 
+	void BackToMenu() {
+		Application.LoadLevel ("LevelSelection");
+	}
+
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "PowerUp") {
 			equippedBullet = other.GetComponent<PowerUp>().pickUpBullet;
@@ -63,7 +67,8 @@ public class Controller : MonoBehaviour {
 			if (life <= 0) {
 				CancelCamEffect();
 				Instantiate (explosion, transform.position, transform.rotation);
-				Destroy (gameObject);
+				GetComponentInChildren<SpriteRenderer>().enabled = false;
+				Invoke("BackToMenu",0.5f);
 			}
 		}
 	}
