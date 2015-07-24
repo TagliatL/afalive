@@ -3,8 +3,33 @@ using System.Collections;
 
 public class StandardBullet : BulletManager {
 
+	public float mineTimeout;
+	public float areaOfEffect;
+
 	void OnEnable() {
-		Object.Destroy(this.gameObject, this.lifeTime);
+		if (this.tag == "Bullet") {
+			Object.Destroy(this.gameObject, this.lifeTime);
+		} else if (this.tag == "Mine") {
+			StartCoroutine("MineTimer");
+		}
+	}
+
+	public void ExplodeMine() {
+		Object.Destroy(this.gameObject);
+		Collider[] hitColliders = Physics.OverlapSphere(this.gameObject.transform.position, areaOfEffect);
+		foreach (Collider hitCollider in hitColliders) {
+			if (hitCollider.CompareTag("Enemy")) {
+				hitCollider.gameObject.GetComponent<DestroyByContact>().life -= this.damages;
+				if (hitCollider.gameObject.GetComponent<DestroyByContact>().life <= 0) {
+					Object.Destroy(hitCollider.gameObject);
+				}
+			}
+		}
+	}
+
+	IEnumerator MineTimer() {
+		yield return new WaitForSeconds(mineTimeout);
+		ExplodeMine();
 	}
 
 	// Update is called once per frame

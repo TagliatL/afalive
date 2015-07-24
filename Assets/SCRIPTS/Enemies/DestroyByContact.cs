@@ -15,6 +15,8 @@ public class DestroyByContact : MonoBehaviour {
 				Instantiate (explosion, transform.position, transform.rotation);
 				Destroy (gameObject);
 			}
+		} else if (other.tag == "Mine") {
+			other.GetComponent<StandardBullet>().ExplodeMine();
 		}
 	}
 }
