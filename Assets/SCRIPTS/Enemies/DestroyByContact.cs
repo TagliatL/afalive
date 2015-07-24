@@ -5,6 +5,15 @@ public class DestroyByContact : MonoBehaviour {
 
 	public int life;
 	public GameObject explosion;
+	SpriteRenderer renderer;
+	int fullLife;
+	float speed;
+
+	void Start() {
+		renderer = gameObject.GetComponent<SpriteRenderer>();
+		fullLife = life;
+		speed = 2;
+	}
 
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Bullet") {
@@ -18,6 +27,12 @@ public class DestroyByContact : MonoBehaviour {
 		} else if (other.tag == "Mine") {
 			other.GetComponent<StandardBullet>().ExplodeMine();
 		}
+	}
+
+	void Update() {
+		float colorMultiplier = (float)life/(float)fullLife;
+		print (colorMultiplier);
+		renderer.color = Color.Lerp(renderer.color, new Color(colorMultiplier, colorMultiplier, colorMultiplier), speed * Time.deltaTime);
 	}
 
 	public void Explode() {
