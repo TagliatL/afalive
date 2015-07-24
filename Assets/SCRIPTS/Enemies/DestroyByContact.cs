@@ -9,7 +9,7 @@ public class DestroyByContact : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Bullet") {
 			life -= other.GetComponent<BulletManager>().damages;
-			Instantiate (other.GetComponent<BulletManager>().impactParticles, transform.position, transform.rotation);
+			Instantiate (other.GetComponent<BulletManager>().impactParticles, other.transform.position, transform.rotation);
 			Destroy (other.gameObject);
 			if(life <= 0) {
 				Instantiate (explosion, transform.position, transform.rotation);
