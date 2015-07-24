@@ -68,7 +68,7 @@ public class Controller : MonoBehaviour {
 				CancelCamEffect();
 				Instantiate (explosion, transform.position, transform.rotation);
 				GetComponentInChildren<SpriteRenderer>().enabled = false;
-				Invoke("BackToMenu",0.5f);
+				Invoke("BackToMenu",1.5f);
 			}
 		}
 	}
