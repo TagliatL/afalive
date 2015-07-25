@@ -4,6 +4,8 @@ using System.Collections;
 public class DestroyByContact : MonoBehaviour {
 
 	public int life;
+	public float dropChance;
+	public GameObject[] powerUps;
 	public GameObject explosion;
 	SpriteRenderer renderer;
 	int fullLife;
@@ -22,6 +24,10 @@ public class DestroyByContact : MonoBehaviour {
 			Destroy (other.gameObject);
 			if(life <= 0) {
 				Instantiate (explosion, transform.position, transform.rotation);
+
+				if (Random.Range(0, 100) < dropChance) {
+					Instantiate(powerUps[Random.Range(0, powerUps.Length - 1)], transform.position, transform.rotation);
+				}
 				Destroy (gameObject);
 			}
 		} else if (other.tag == "Mine") {
