@@ -9,20 +9,33 @@ public class Controller : MonoBehaviour {
 	float y;
 	float counter;
 	bool isDead;
+	bool uppgrading;
 	public int life;
 	public GameObject explosion;
 	public GameObject equippedBullet;
+	public GameObject oldEquippedBullet;
+	public GameObject usedBullet;
+	public GameObject[] uppgradeWeapons;
+	public SpriteRenderer ship;
+	GameObject tempoBullet;
 	public GameObject fireParticles;
 	GameObject instanciatedParticles;
 	GameObject instanciatedBullet;
+	BulletManager bulletValues;
+
 
 	void Start () {
+		bulletValues= usedBullet.GetComponent<BulletManager> ();
 		rb = GetComponent<Rigidbody>();
 		counter = 0f;
 	}
 
+	void Update() {
+		float colorMultiplier = (float)life/(float)6.0f;
+		ship.color = Color.Lerp(ship.color, new Color(colorMultiplier, colorMultiplier, colorMultiplier), 2 * Time.deltaTime);
+	}
+
 	void FixedUpdate() {
-		BulletManager bulletValues = equippedBullet.GetComponent<BulletManager> ();
 		rb.angularVelocity = Vector3.zero;
 		var inputDevice = InputManager.ActiveDevice;
 		x = -inputDevice.LeftStickX;
@@ -36,7 +49,7 @@ public class Controller : MonoBehaviour {
 		if (inputDevice.Action1.IsPressed && (counter <= 0f) && !isDead) {
 			counter = bulletValues.rateOfFire * 100;
 			rb.AddForce(transform.up * -bulletValues.force);
-			instanciatedBullet = Instantiate (equippedBullet, transform.position, transform.rotation) as GameObject;
+			instanciatedBullet = Instantiate (usedBullet, transform.position, transform.rotation) as GameObject;
 			instanciatedParticles = Instantiate(fireParticles, transform.position, transform.rotation) as GameObject;
 		}
 		counter--;
@@ -52,10 +65,50 @@ public class Controller : MonoBehaviour {
 		Application.LoadLevel ("LevelSelection");
 	}
 
+	void Equip(Collider other) {
+
+		if (equippedBullet != null && oldEquippedBullet == null) {
+			oldEquippedBullet = equippedBullet;
+			equippedBullet = other.GetComponent<PowerUp> ().pickUpBullet;
+			usedBullet = equippedBullet;
+			uppgrading = false;
+		} else {
+			if(other.GetComponent<PowerUp> ().pickUpBullet.name == equippedBullet.name 
+			 || other.GetComponent<PowerUp> ().pickUpBullet.name == oldEquippedBullet.name) {
+				uppgrading = false;
+			}
+			else {
+				oldEquippedBullet = equippedBullet;
+				equippedBullet = other.GetComponent<PowerUp> ().pickUpBullet;
+				uppgrading = false;
+			}
+
+			if(equippedBullet.name == oldEquippedBullet.name) {
+				usedBullet = equippedBullet;
+				uppgrading = false;
+			}
+			if ((equippedBullet.name == "Shotgun" && oldEquippedBullet.name == "Mines") 
+			    || (equippedBullet.name == "Mines" && oldEquippedBullet.name == "Shotgun")) {
+				usedBullet = uppgradeWeapons[1];
+				uppgrading = false;
+			} else if ((equippedBullet.name == "Shotgun" && oldEquippedBullet.name == "Gatling") 
+			           || (equippedBullet.name == "Gatling" && oldEquippedBullet.name == "Shotgun")) {
+				usedBullet = uppgradeWeapons[2];
+				uppgrading = false;
+			} else if ((equippedBullet.name == "Mines" && oldEquippedBullet.name == "Gatling") 
+			           || (equippedBullet.name == "Gatling" && oldEquippedBullet.name == "Mines")) {
+				usedBullet = uppgradeWeapons[0];
+				uppgrading = false;
+			}
+		}
+		bulletValues= usedBullet.GetComponent<BulletManager> ();
+	}
+
 	void OnTriggerEnter(Collider other) {
-		if (other.tag == "PowerUp") {
-			equippedBullet = other.GetComponent<PowerUp>().pickUpBullet;
+		if (other.tag == "PowerUp" && !uppgrading) {
+			uppgrading = true;
 			other.GetComponent<PowerUp>().Used();
+			Equip(other);
 			GameObject.FindGameObjectWithTag("MainCamera").GetComponent<AnalogGlitch>().colorDrift = 0.4f;
 			Invoke("CancelCamEffect",0.35f);
 		} else if (other.tag == "Enemy") {

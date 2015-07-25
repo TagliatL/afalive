@@ -24,9 +24,6 @@ public class StandardBullet : BulletManager {
 		foreach (Collider hitCollider in hitColliders) {
 			if (hitCollider.CompareTag("Enemy") || hitCollider.CompareTag("Core")) {
 				hitCollider.gameObject.GetComponent<DestroyByContact>().life -= this.damages;
-				if (hitCollider.gameObject.GetComponent<DestroyByContact>().life <= 0) {
-					Object.Destroy(hitCollider.gameObject);
-				}
 			}
 		}
 	}

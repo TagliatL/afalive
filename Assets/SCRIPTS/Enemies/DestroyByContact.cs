@@ -26,18 +26,25 @@ public class DestroyByContact : MonoBehaviour {
 				Instantiate (explosion, transform.position, transform.rotation);
 
 				if (Random.Range(0, 100) < dropChance) {
-					Instantiate(powerUps[Random.Range(0, powerUps.Length - 1)], transform.position, transform.rotation);
+					Instantiate(powerUps[Random.Range(0, powerUps.Length)], transform.position, transform.rotation);
 				}
 				Destroy (gameObject);
 			}
 		} else if (other.tag == "Mine") {
 			other.GetComponent<StandardBullet>().ExplodeMine();
+			if(life <= 0) {
+				Instantiate (explosion, transform.position, transform.rotation);
+				
+				if (Random.Range(0, 100) < dropChance) {
+					Instantiate(powerUps[Random.Range(0, powerUps.Length)], transform.position, transform.rotation);
+				}
+				Destroy (gameObject);
+			}
 		}
 	}
 
 	void Update() {
 		float colorMultiplier = (float)life/(float)fullLife;
-		print (colorMultiplier);
 		renderer.color = Color.Lerp(renderer.color, new Color(colorMultiplier, colorMultiplier, colorMultiplier), speed * Time.deltaTime);
 	}
 
